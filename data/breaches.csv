@@ -1,9 +1,201 @@
-email,breach,year,password_exposed
-user@gmail.com,LinkedIn,2021,Yes
-john@yahoo.com,Dropbox,2019,No
-admin@company.com,Adobe,2020,Yes
-test@demo.com,Canva,2022,No
-security@org.net,MySpace,2018,Yes
-employee@company.com,LinkedIn,2023,No
-researcher@uni.edu,DataShare,2024,Yes
-contact@startup.io,MailChimp,2022,No
+email,domain,breach,breach_date,attack_type,data_exposed,password_hint,password_exposed
+user@myspace.com,myspace.com,MySpace,2018-11-28,Unauthorized Access,Emails+Passwords,***Gcb,Yes
+security@dropbox.com,dropbox.com,Dropbox,2013-12-10,API Exploit,Personal Information,***VkZ,Yes
+dev@dropbox.com,dropbox.com,Dropbox,2014-09-19,Credential Stuffing,Usernames+Passwords,Not Available,No
+user@adobe.com,adobe.com,Adobe,2020-07-05,Unauthorized Access,Security Questions,Not Available,No
+security@linkedin.com,linkedin.com,LinkedIn,2021-07-30,Web Vulnerability,Usernames+Passwords,Not Available,No
+security@dropbox.com,dropbox.com,Dropbox,2024-03-18,Database Leak,Emails+Phone Numbers,Not Available,No
+info@dropbox.com,dropbox.com,Dropbox,2017-06-02,Insider Leak,Public Profile Data,***yKg,Yes
+user@myspace.com,myspace.com,MySpace,2014-04-21,Unauthorized Access,Security Questions,***1B6,Yes
+dev@facebook.com,facebook.com,Facebook,2013-07-06,Phishing,Personal Information,***bHb,Yes
+dev@twitter.com,twitter.com,Twitter,2021-04-29,Database Leak,Emails+Phone Numbers,***8iP,Yes
+info@dropbox.com,dropbox.com,Dropbox,2016-10-24,API Exploit,Emails+Phone Numbers,Not Available,No
+admin@canva.com,canva.com,Canva,2017-04-06,Web Vulnerability,Security Questions,Not Available,No
+employee@canva.com,canva.com,Canva,2023-06-09,Credential Stuffing,Usernames+Passwords,Not Available,No
+info@marriott.com,marriott.com,Marriott,2018-10-03,API Exploit,Emails+Passwords,***tJ6,Yes
+admin@equifax.com,equifax.com,Equifax,2015-07-10,Insider Leak,Personal Information,***IVK,Yes
+dev@facebook.com,facebook.com,Facebook,2023-03-19,Social Engineering,Public Profile Data,***cwX,Yes
+security@adobe.com,adobe.com,Adobe,2013-01-04,API Exploit,Personal Information,Not Available,No
+contact@myspace.com,myspace.com,MySpace,2018-07-14,Insider Leak,Personal Information,Not Available,No
+info@canva.com,canva.com,Canva,2014-12-24,Phishing,Security Questions,Not Available,No
+employee@marriott.com,marriott.com,Marriott,2019-08-08,Insider Leak,Emails+Passwords,***nIt,Yes
+security@canva.com,canva.com,Canva,2023-09-30,Web Vulnerability,Personal Information,Not Available,No
+employee@adobe.com,adobe.com,Adobe,2015-09-10,Social Engineering,Security Questions,Not Available,No
+security@yahoo.com,yahoo.com,Yahoo,2020-07-25,Phishing,Public Profile Data,***1PC,Yes
+contact@yahoo.com,yahoo.com,Yahoo,2017-06-22,Web Vulnerability,Usernames+Passwords,Not Available,No
+dev@twitter.com,twitter.com,Twitter,2014-09-22,Phishing,Public Profile Data,***60J,Yes
+admin@marriott.com,marriott.com,Marriott,2023-03-12,Unauthorized Access,Personal Information,***3LW,Yes
+info@myspace.com,myspace.com,MySpace,2023-09-19,Unauthorized Access,Personal Information,Not Available,No
+security@yahoo.com,yahoo.com,Yahoo,2022-03-07,Database Leak,Emails+Phone Numbers,***Qfx,Yes
+employee@twitter.com,twitter.com,Twitter,2018-12-17,Phishing,Public Profile Data,Not Available,No
+dev@facebook.com,facebook.com,Facebook,2014-12-30,Unauthorized Access,Security Questions,***HV7,Yes
+info@marriott.com,marriott.com,Marriott,2022-03-26,Phishing,Public Profile Data,***iOG,Yes
+contact@equifax.com,equifax.com,Equifax,2023-05-12,API Exploit,Public Profile Data,***NHn,Yes
+admin@canva.com,canva.com,Canva,2023-02-12,Web Vulnerability,Emails+Passwords,Not Available,No
+admin@marriott.com,marriott.com,Marriott,2017-12-24,Web Vulnerability,Public Profile Data,***Kve,Yes
+security@equifax.com,equifax.com,Equifax,2024-11-06,Web Vulnerability,Personal Information,Not Available,No
+user@facebook.com,facebook.com,Facebook,2023-06-05,Social Engineering,Emails+Phone Numbers,Not Available,No
+admin@adobe.com,adobe.com,Adobe,2023-11-08,Phishing,Public Profile Data,***CP3,Yes
+employee@adobe.com,adobe.com,Adobe,2016-06-14,Database Leak,Emails+Passwords,Not Available,No
+support@facebook.com,facebook.com,Facebook,2017-11-08,Phishing,Personal Information,Not Available,No
+employee@linkedin.com,linkedin.com,LinkedIn,2013-01-02,Phishing,Usernames+Passwords,***zeY,Yes
+info@equifax.com,equifax.com,Equifax,2020-03-17,Social Engineering,Public Profile Data,Not Available,No
+admin@yahoo.com,yahoo.com,Yahoo,2022-02-18,Web Vulnerability,Usernames+Passwords,***u2U,Yes
+admin@twitter.com,twitter.com,Twitter,2020-08-26,Insider Leak,Usernames+Passwords,***Snn,Yes
+dev@marriott.com,marriott.com,Marriott,2019-03-16,Credential Stuffing,Emails+Phone Numbers,Not Available,No
+contact@myspace.com,myspace.com,MySpace,2023-03-23,Web Vulnerability,Security Questions,Not Available,No
+security@equifax.com,equifax.com,Equifax,2019-05-20,Social Engineering,Emails+Phone Numbers,Not Available,No
+employee@yahoo.com,yahoo.com,Yahoo,2013-02-01,Insider Leak,Usernames+Passwords,Not Available,No
+dev@dropbox.com,dropbox.com,Dropbox,2013-01-28,Insider Leak,Usernames+Passwords,***BTq,Yes
+info@dropbox.com,dropbox.com,Dropbox,2014-12-22,Phishing,Emails+Passwords,***PlE,Yes
+dev@dropbox.com,dropbox.com,Dropbox,2024-07-17,Insider Leak,Public Profile Data,***lol,Yes
+employee@yahoo.com,yahoo.com,Yahoo,2021-09-02,Unauthorized Access,Security Questions,Not Available,No
+employee@dropbox.com,dropbox.com,Dropbox,2023-05-18,Web Vulnerability,Usernames+Passwords,Not Available,No
+user@yahoo.com,yahoo.com,Yahoo,2013-09-03,Social Engineering,Usernames+Passwords,***JPT,Yes
+admin@myspace.com,myspace.com,MySpace,2022-03-30,Web Vulnerability,Emails+Passwords,***GP7,Yes
+user@linkedin.com,linkedin.com,LinkedIn,2018-03-06,Unauthorized Access,Public Profile Data,***xmx,Yes
+support@myspace.com,myspace.com,MySpace,2023-06-22,Unauthorized Access,Usernames+Passwords,Not Available,No
+contact@facebook.com,facebook.com,Facebook,2018-05-03,Web Vulnerability,Emails+Passwords,***dtM,Yes
+support@adobe.com,adobe.com,Adobe,2014-02-02,API Exploit,Public Profile Data,Not Available,No
+info@facebook.com,facebook.com,Facebook,2017-06-17,API Exploit,Public Profile Data,Not Available,No
+dev@marriott.com,marriott.com,Marriott,2019-11-29,Insider Leak,Public Profile Data,Not Available,No
+support@canva.com,canva.com,Canva,2017-07-20,Social Engineering,Emails+Passwords,***R5V,Yes
+security@linkedin.com,linkedin.com,LinkedIn,2014-11-16,Insider Leak,Public Profile Data,Not Available,No
+employee@linkedin.com,linkedin.com,LinkedIn,2018-11-29,Unauthorized Access,Security Questions,Not Available,No
+info@linkedin.com,linkedin.com,LinkedIn,2013-09-09,Insider Leak,Security Questions,Not Available,No
+security@facebook.com,facebook.com,Facebook,2017-12-14,Insider Leak,Security Questions,Not Available,No
+user@facebook.com,facebook.com,Facebook,2024-06-21,Insider Leak,Personal Information,Not Available,No
+dev@canva.com,canva.com,Canva,2024-08-15,Phishing,Usernames+Passwords,***DGG,Yes
+security@canva.com,canva.com,Canva,2014-02-26,Unauthorized Access,Security Questions,***M7o,Yes
+admin@equifax.com,equifax.com,Equifax,2016-12-22,Database Leak,Emails+Phone Numbers,***kWB,Yes
+dev@equifax.com,equifax.com,Equifax,2018-07-28,API Exploit,Emails+Phone Numbers,***OE0,Yes
+admin@twitter.com,twitter.com,Twitter,2019-05-27,Web Vulnerability,Personal Information,***g8o,Yes
+security@marriott.com,marriott.com,Marriott,2020-10-03,Unauthorized Access,Emails+Phone Numbers,Not Available,No
+security@facebook.com,facebook.com,Facebook,2018-11-15,Phishing,Security Questions,Not Available,No
+user@adobe.com,adobe.com,Adobe,2023-11-27,Unauthorized Access,Usernames+Passwords,***NDu,Yes
+security@twitter.com,twitter.com,Twitter,2015-08-30,Insider Leak,Public Profile Data,***56Y,Yes
+support@dropbox.com,dropbox.com,Dropbox,2017-08-05,Database Leak,Security Questions,***UzO,Yes
+info@twitter.com,twitter.com,Twitter,2018-08-22,Unauthorized Access,Personal Information,Not Available,No
+contact@twitter.com,twitter.com,Twitter,2023-07-12,Credential Stuffing,Usernames+Passwords,***GqW,Yes
+support@myspace.com,myspace.com,MySpace,2023-03-27,Phishing,Emails+Phone Numbers,***6xb,Yes
+user@linkedin.com,linkedin.com,LinkedIn,2022-10-26,Web Vulnerability,Public Profile Data,***tbX,Yes
+contact@equifax.com,equifax.com,Equifax,2016-10-07,Insider Leak,Security Questions,Not Available,No
+security@facebook.com,facebook.com,Facebook,2020-09-20,Credential Stuffing,Usernames+Passwords,***qHt,Yes
+support@marriott.com,marriott.com,Marriott,2016-04-09,Social Engineering,Personal Information,Not Available,No
+employee@facebook.com,facebook.com,Facebook,2023-05-15,Database Leak,Emails+Passwords,***OlW,Yes
+info@dropbox.com,dropbox.com,Dropbox,2015-11-30,Database Leak,Emails+Passwords,***aZP,Yes
+security@linkedin.com,linkedin.com,LinkedIn,2024-07-07,Credential Stuffing,Emails+Passwords,***Fva,Yes
+user@equifax.com,equifax.com,Equifax,2014-09-12,Insider Leak,Emails+Phone Numbers,Not Available,No
+user@facebook.com,facebook.com,Facebook,2013-02-15,Credential Stuffing,Usernames+Passwords,***p3u,Yes
+employee@dropbox.com,dropbox.com,Dropbox,2014-01-07,Credential Stuffing,Security Questions,***CX4,Yes
+support@canva.com,canva.com,Canva,2021-05-30,Unauthorized Access,Personal Information,***TV2,Yes
+user@facebook.com,facebook.com,Facebook,2023-03-31,Credential Stuffing,Usernames+Passwords,Not Available,No
+contact@marriott.com,marriott.com,Marriott,2014-08-25,Unauthorized Access,Emails+Phone Numbers,Not Available,No
+security@facebook.com,facebook.com,Facebook,2021-11-20,Insider Leak,Usernames+Passwords,***LHc,Yes
+user@myspace.com,myspace.com,MySpace,2022-06-15,Credential Stuffing,Emails+Phone Numbers,***Jr7,Yes
+security@adobe.com,adobe.com,Adobe,2013-10-15,Database Leak,Public Profile Data,***5sO,Yes
+user@adobe.com,adobe.com,Adobe,2023-07-07,Unauthorized Access,Security Questions,***9uK,Yes
+admin@marriott.com,marriott.com,Marriott,2021-08-07,API Exploit,Public Profile Data,***3Jt,Yes
+user@twitter.com,twitter.com,Twitter,2013-07-07,Insider Leak,Security Questions,***zSq,Yes
+info@twitter.com,twitter.com,Twitter,2021-06-11,Social Engineering,Security Questions,Not Available,No
+security@adobe.com,adobe.com,Adobe,2021-07-20,Database Leak,Usernames+Passwords,Not Available,No
+dev@yahoo.com,yahoo.com,Yahoo,2016-01-31,Database Leak,Usernames+Passwords,Not Available,No
+dev@marriott.com,marriott.com,Marriott,2015-04-12,Insider Leak,Public Profile Data,Not Available,No
+info@facebook.com,facebook.com,Facebook,2017-05-06,Social Engineering,Emails+Passwords,***u19,Yes
+info@marriott.com,marriott.com,Marriott,2022-12-27,Unauthorized Access,Emails+Phone Numbers,Not Available,No
+employee@facebook.com,facebook.com,Facebook,2014-07-29,Credential Stuffing,Emails+Passwords,Not Available,No
+employee@marriott.com,marriott.com,Marriott,2017-11-19,Insider Leak,Public Profile Data,Not Available,No
+info@twitter.com,twitter.com,Twitter,2022-06-28,Credential Stuffing,Public Profile Data,***QM9,Yes
+admin@marriott.com,marriott.com,Marriott,2023-05-10,Credential Stuffing,Usernames+Passwords,Not Available,No
+dev@twitter.com,twitter.com,Twitter,2021-10-06,Social Engineering,Public Profile Data,Not Available,No
+employee@adobe.com,adobe.com,Adobe,2013-11-23,Social Engineering,Security Questions,Not Available,No
+support@facebook.com,facebook.com,Facebook,2020-12-17,Credential Stuffing,Public Profile Data,Not Available,No
+support@equifax.com,equifax.com,Equifax,2024-02-16,Credential Stuffing,Usernames+Passwords,Not Available,No
+dev@adobe.com,adobe.com,Adobe,2013-08-26,Unauthorized Access,Security Questions,Not Available,No
+info@yahoo.com,yahoo.com,Yahoo,2018-10-22,Web Vulnerability,Usernames+Passwords,Not Available,No
+support@linkedin.com,linkedin.com,LinkedIn,2022-11-18,Unauthorized Access,Emails+Phone Numbers,***Mzp,Yes
+contact@canva.com,canva.com,Canva,2020-12-25,Unauthorized Access,Personal Information,Not Available,No
+info@linkedin.com,linkedin.com,LinkedIn,2017-05-20,Unauthorized Access,Public Profile Data,Not Available,No
+user@dropbox.com,dropbox.com,Dropbox,2024-06-04,Social Engineering,Usernames+Passwords,Not Available,No
+support@canva.com,canva.com,Canva,2015-12-01,Database Leak,Usernames+Passwords,Not Available,No
+security@yahoo.com,yahoo.com,Yahoo,2020-05-21,Credential Stuffing,Emails+Passwords,***LKc,Yes
+contact@adobe.com,adobe.com,Adobe,2024-01-03,Unauthorized Access,Public Profile Data,Not Available,No
+security@canva.com,canva.com,Canva,2024-01-06,API Exploit,Emails+Phone Numbers,***2pr,Yes
+admin@adobe.com,adobe.com,Adobe,2018-03-23,Credential Stuffing,Personal Information,Not Available,No
+security@myspace.com,myspace.com,MySpace,2021-07-23,Database Leak,Personal Information,***cEt,Yes
+admin@equifax.com,equifax.com,Equifax,2015-06-19,Unauthorized Access,Usernames+Passwords,Not Available,No
+support@canva.com,canva.com,Canva,2022-07-01,Phishing,Public Profile Data,***uFE,Yes
+security@yahoo.com,yahoo.com,Yahoo,2020-05-08,Social Engineering,Security Questions,***Jiq,Yes
+contact@marriott.com,marriott.com,Marriott,2016-03-21,Web Vulnerability,Emails+Passwords,***RhO,Yes
+user@facebook.com,facebook.com,Facebook,2021-11-28,Web Vulnerability,Security Questions,***3IM,Yes
+admin@linkedin.com,linkedin.com,LinkedIn,2024-02-25,Web Vulnerability,Personal Information,***2Ek,Yes
+user@yahoo.com,yahoo.com,Yahoo,2017-11-24,Phishing,Emails+Phone Numbers,Not Available,No
+employee@marriott.com,marriott.com,Marriott,2023-04-26,Web Vulnerability,Usernames+Passwords,Not Available,No
+info@linkedin.com,linkedin.com,LinkedIn,2016-05-30,Credential Stuffing,Emails+Phone Numbers,Not Available,No
+dev@canva.com,canva.com,Canva,2023-04-09,Social Engineering,Personal Information,***dK1,Yes
+dev@facebook.com,facebook.com,Facebook,2023-02-16,Phishing,Emails+Phone Numbers,Not Available,No
+admin@twitter.com,twitter.com,Twitter,2014-05-27,API Exploit,Emails+Passwords,Not Available,No
+dev@adobe.com,adobe.com,Adobe,2018-07-03,Credential Stuffing,Emails+Passwords,***tK6,Yes
+admin@facebook.com,facebook.com,Facebook,2015-03-07,Phishing,Emails+Phone Numbers,***qv3,Yes
+employee@equifax.com,equifax.com,Equifax,2016-12-04,Web Vulnerability,Usernames+Passwords,Not Available,No
+user@yahoo.com,yahoo.com,Yahoo,2013-10-14,Phishing,Personal Information,Not Available,No
+security@myspace.com,myspace.com,MySpace,2024-10-09,Unauthorized Access,Security Questions,Not Available,No
+dev@myspace.com,myspace.com,MySpace,2013-12-31,API Exploit,Personal Information,Not Available,No
+support@facebook.com,facebook.com,Facebook,2020-05-13,Database Leak,Usernames+Passwords,***cDS,Yes
+employee@adobe.com,adobe.com,Adobe,2016-10-09,API Exploit,Emails+Passwords,***i1K,Yes
+admin@linkedin.com,linkedin.com,LinkedIn,2014-01-15,API Exploit,Emails+Passwords,***Eeo,Yes
+security@adobe.com,adobe.com,Adobe,2024-03-02,API Exploit,Personal Information,***0L8,Yes
+employee@adobe.com,adobe.com,Adobe,2017-11-26,API Exploit,Emails+Passwords,***9FX,Yes
+support@dropbox.com,dropbox.com,Dropbox,2024-06-23,Social Engineering,Public Profile Data,***dso,Yes
+security@facebook.com,facebook.com,Facebook,2014-06-01,API Exploit,Public Profile Data,Not Available,No
+support@facebook.com,facebook.com,Facebook,2017-01-04,Unauthorized Access,Emails+Passwords,Not Available,No
+contact@dropbox.com,dropbox.com,Dropbox,2017-03-14,Unauthorized Access,Security Questions,Not Available,No
+security@adobe.com,adobe.com,Adobe,2021-10-17,API Exploit,Emails+Phone Numbers,Not Available,No
+dev@marriott.com,marriott.com,Marriott,2020-04-01,Phishing,Emails+Passwords,Not Available,No
+employee@linkedin.com,linkedin.com,LinkedIn,2017-12-20,Web Vulnerability,Security Questions,***Ig4,Yes
+dev@dropbox.com,dropbox.com,Dropbox,2024-08-07,Social Engineering,Usernames+Passwords,Not Available,No
+user@dropbox.com,dropbox.com,Dropbox,2021-06-11,Phishing,Security Questions,***uun,Yes
+dev@equifax.com,equifax.com,Equifax,2024-10-05,API Exploit,Usernames+Passwords,***wlc,Yes
+security@linkedin.com,linkedin.com,LinkedIn,2016-02-13,API Exploit,Personal Information,Not Available,No
+admin@equifax.com,equifax.com,Equifax,2020-04-22,API Exploit,Security Questions,Not Available,No
+employee@marriott.com,marriott.com,Marriott,2014-11-28,Insider Leak,Public Profile Data,***HTi,Yes
+info@adobe.com,adobe.com,Adobe,2023-10-21,Unauthorized Access,Emails+Phone Numbers,Not Available,No
+employee@facebook.com,facebook.com,Facebook,2016-04-16,Social Engineering,Public Profile Data,Not Available,No
+contact@yahoo.com,yahoo.com,Yahoo,2024-03-04,Database Leak,Public Profile Data,Not Available,No
+user@equifax.com,equifax.com,Equifax,2018-01-05,Insider Leak,Usernames+Passwords,***t9M,Yes
+security@canva.com,canva.com,Canva,2019-01-23,Database Leak,Emails+Phone Numbers,***I7i,Yes
+security@marriott.com,marriott.com,Marriott,2014-12-23,Phishing,Personal Information,***zlg,Yes
+dev@linkedin.com,linkedin.com,LinkedIn,2016-01-08,Insider Leak,Public Profile Data,Not Available,No
+admin@myspace.com,myspace.com,MySpace,2018-08-20,API Exploit,Public Profile Data,***LWf,Yes
+employee@adobe.com,adobe.com,Adobe,2014-01-26,Credential Stuffing,Emails+Phone Numbers,Not Available,No
+employee@canva.com,canva.com,Canva,2021-06-30,Web Vulnerability,Emails+Passwords,Not Available,No
+admin@marriott.com,marriott.com,Marriott,2015-09-18,Credential Stuffing,Emails+Passwords,***AUL,Yes
+info@equifax.com,equifax.com,Equifax,2024-05-16,Social Engineering,Public Profile Data,***vNY,Yes
+employee@twitter.com,twitter.com,Twitter,2023-02-17,Insider Leak,Emails+Phone Numbers,Not Available,No
+employee@dropbox.com,dropbox.com,Dropbox,2016-06-29,Unauthorized Access,Emails+Phone Numbers,Not Available,No
+contact@marriott.com,marriott.com,Marriott,2015-10-21,Insider Leak,Security Questions,Not Available,No
+support@dropbox.com,dropbox.com,Dropbox,2015-02-15,Web Vulnerability,Public Profile Data,***Hlj,Yes
+contact@equifax.com,equifax.com,Equifax,2016-05-16,Web Vulnerability,Security Questions,Not Available,No
+support@myspace.com,myspace.com,MySpace,2024-08-06,Web Vulnerability,Emails+Phone Numbers,***vJ4,Yes
+security@myspace.com,myspace.com,MySpace,2017-06-06,Social Engineering,Security Questions,***5hv,Yes
+security@yahoo.com,yahoo.com,Yahoo,2019-05-21,Credential Stuffing,Personal Information,Not Available,No
+employee@dropbox.com,dropbox.com,Dropbox,2014-03-17,Social Engineering,Usernames+Passwords,Not Available,No
+info@adobe.com,adobe.com,Adobe,2019-04-29,Insider Leak,Personal Information,Not Available,No
+employee@yahoo.com,yahoo.com,Yahoo,2016-05-16,Credential Stuffing,Emails+Passwords,Not Available,No
+admin@marriott.com,marriott.com,Marriott,2021-05-14,Web Vulnerability,Personal Information,Not Available,No
+dev@canva.com,canva.com,Canva,2023-03-22,Database Leak,Usernames+Passwords,Not Available,No
+contact@canva.com,canva.com,Canva,2023-04-06,Web Vulnerability,Usernames+Passwords,Not Available,No
+security@adobe.com,adobe.com,Adobe,2013-10-22,API Exploit,Emails+Phone Numbers,***hSf,Yes
+admin@linkedin.com,linkedin.com,LinkedIn,2020-12-17,Credential Stuffing,Usernames+Passwords,***D0v,Yes
+support@linkedin.com,linkedin.com,LinkedIn,2020-01-19,Web Vulnerability,Usernames+Passwords,Not Available,No
+contact@dropbox.com,dropbox.com,Dropbox,2021-03-08,API Exploit,Usernames+Passwords,Not Available,No
+info@twitter.com,twitter.com,Twitter,2016-12-18,Credential Stuffing,Emails+Passwords,***PTv,Yes
+security@yahoo.com,yahoo.com,Yahoo,2013-08-18,Credential Stuffing,Public Profile Data,***Crt,Yes
+info@yahoo.com,yahoo.com,Yahoo,2013-08-14,API Exploit,Security Questions,***y3r,Yes
+admin@facebook.com,facebook.com,Facebook,2016-01-22,Credential Stuffing,Public Profile Data,***bKg,Yes
+contact@yahoo.com,yahoo.com,Yahoo,2014-05-12,Web Vulnerability,Emails+Passwords,Not Available,No
+admin@yahoo.com,yahoo.com,Yahoo,2018-02-20,Database Leak,Security Questions,***SMd,Yes
+support@canva.com,canva.com,Canva,2021-09-07,Insider Leak,Usernames+Passwords,***e8U,Yes
+employee@canva.com,canva.com,Canva,2020-08-07,Database Leak,Emails+Phone Numbers,Not Available,No
+info@marriott.com,marriott.com,Marriott,2024-10-17,Unauthorized Access,Emails+Passwords,Not Available,No
+security@canva.com,canva.com,Canva,2013-12-07,Database Leak,Public Profile Data,***xXa,Yes
