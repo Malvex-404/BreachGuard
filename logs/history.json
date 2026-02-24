@@ -1,0 +1,82 @@
+[
+    {
+        "timestamp": "2026-02-24 16:49:17",
+        "query": "user@myspace.com",
+        "search_type": "email",
+        "records_found": 3,
+        "risk_level": "CRITICAL",
+        "risk_score": 25
+    },
+    {
+        "timestamp": "2026-02-24 16:49:43",
+        "query": "user@myspace.com",
+        "search_type": "email",
+        "records_found": 3,
+        "risk_level": "CRITICAL",
+        "risk_score": 25
+    },
+    {
+        "timestamp": "2026-02-24 16:59:10",
+        "query": "user@myspace.com",
+        "search_type": "email",
+        "records_found": 3,
+        "risk_level": "CRITICAL",
+        "risk_score": 25
+    },
+    {
+        "timestamp": "2026-02-24 17:01:45",
+        "query": "user@myspace.com",
+        "search_type": "email",
+        "records_found": 3,
+        "risk_level": "CRITICAL",
+        "risk_score": 25
+    },
+    {
+        "timestamp": "2026-02-24 17:06:24",
+        "query": "dev@dropbox.com",
+        "search_type": "email",
+        "records_found": 4,
+        "risk_level": "CRITICAL",
+        "risk_score": 26
+    },
+    {
+        "timestamp": "2026-02-24 17:10:48",
+        "query": "dev@dropbox.com",
+        "search_type": "email",
+        "records_found": 4,
+        "risk_level": "CRITICAL",
+        "risk_score": 26
+    },
+    {
+        "timestamp": "2026-02-24 17:11:27",
+        "query": "facebook",
+        "search_type": "domain",
+        "records_found": 0,
+        "risk_level": "LOW",
+        "risk_score": 0
+    },
+    {
+        "timestamp": "2026-02-24 17:14:51",
+        "query": "dev@dropbox.com",
+        "search_type": "email",
+        "records_found": 4,
+        "risk_level": "CRITICAL",
+        "risk_score": 26
+    },
+    {
+        "timestamp": "2026-02-24 17:18:06",
+        "query": "dev@dropbox.com",
+        "search_type": "email",
+        "records_found": 4,
+        "risk_level": "CRITICAL",
+        "risk_score": 26
+    },
+    {
+        "timestamp": "2026-02-24 17:18:42",
+        "query": "dev@dropbox.com",
+        "search_type": "email",
+        "records_found": 4,
+        "risk_level": "CRITICAL",
+        "risk_score": 26
+    }
+]
