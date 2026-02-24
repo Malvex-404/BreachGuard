@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BreachGuard Dashboard</title>
+</head>
+<body>
+    <h1>BreachGuard</h1>
+
+    <form method="POST">
+        <input type="text" name="query" placeholder="Enter Email or Domain" required>
+        <button type="submit">Scan</button>
+    </form>
+
+    {% if result %}
+        <h2>Breaches Found:</h2>
+        <ul>
+            {% for r in result %}
+                <li>{{ r.email }} — {{ r.breach }} ({{ r.year }}) | Password Exposed: {{ r.password_exposed }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Risk Level: {{ risk }}</h3>
+    {% elif result is not none %}
+        <p>No Breach Found</p>
+    {% endif %}
+</body>
+</html>
