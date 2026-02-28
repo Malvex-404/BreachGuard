@@ -1,19 +1,28 @@
 from flask import Flask, render_template, request, send_file
-from modules.detector import detect_query
-from modules.risk_engine import calculate_risk
-from modules.monitor import save_scan, load_history
-from modules.reporter import generate_report
-from modules.password_analyzer import analyze_password
+from flask import session, redirect, url_for
+
+# Services
+from services.breach_service import detect_query
+from services.risk_service import calculate_risk
+from services.password_service import analyze_password
+from services.reporter import generate_report
+
+# Database
 
 app = Flask(__name__)
+app.secret_key = "dev_secret_key"
 
 
+# -------------------------------
+# PUBLIC LANDING PAGE
+# -------------------------------
 @app.route("/", methods=["GET", "POST"])
 def index():
 
     detection = None
     risk = None
     query = None
+    preview_mode = True   # Public users see limited data
 
     if request.method == "POST":
         query = request.form.get("query", "").strip()
@@ -22,19 +31,66 @@ def index():
             detection = detect_query(query)
             risk = calculate_risk(detection)
 
-            # Save scan to history
-            save_scan(query, detection, risk)
-
     return render_template(
         "index.html",
         detection=detection,
         risk=risk,
-        query=query
+        query=query,
+        preview_mode=preview_mode
     )
 
 
+# -------------------------------
+# PASSWORD CHECK
+# -------------------------------
+@app.route("/password-check", methods=["GET", "POST"])
+def password_check():
+
+    result = None
+
+    if request.method == "POST":
+        password = request.form.get("password")
+
+        if password:
+            result = analyze_password(password)
+
+    return render_template("password_check.html", result=result)
+
+
+# -------------------------------
+# LOGIN (Will connect to MySQL later)
+# -------------------------------
+@app.route("/login", methods=["GET", "POST"])
+def login_page():
+    return render_template("login.html")
+
+
+# -------------------------------
+# REGISTER (Will connect to MySQL later)
+# -------------------------------
+@app.route("/register", methods=["GET", "POST"])
+def register_page():
+    return render_template("register.html")
+
+
+# -------------------------------
+# DASHBOARD (Protected)
+# -------------------------------
+@app.route("/dashboard")
+def dashboard():
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+    return render_template("dashboard.html")
+
+
+# -------------------------------
+# REPORT DOWNLOAD
+# -------------------------------
 @app.route("/report", methods=["POST"])
 def report():
+
     query = request.form.get("query")
 
     detection = detect_query(query)
@@ -45,21 +101,8 @@ def report():
     return send_file(filepath, as_attachment=True)
 
 
-@app.route("/history")
-def history():
-    history_data = load_history()
-    return render_template("history.html", history=history_data)
-
-@app.route("/password-check", methods=["GET", "POST"])
-def password_check():
-
-    result = None
-
-    if request.method == "POST":
-        password = request.form.get("password")
-
-        result = analyze_password(password)
-
-    return render_template("password_check.html", result=result)
+# -------------------------------
+# RUN APP
+# -------------------------------
 if __name__ == "__main__":
     app.run(debug=True)

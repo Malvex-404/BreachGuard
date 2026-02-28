@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="mb-4">📧 Monitored Emails</h2>
+
+<div class="card bg-secondary p-4">
+
+    <form method="POST" class="mb-4">
+        <div class="input-group">
+            <input name="email" class="form-control"
+                   placeholder="Add email to monitor" required>
+            <button class="btn btn-warning">Add</button>
+        </div>
+    </form>
+
+    {% if alerts %}
+        {% for alert in alerts %}
+        <div class="card bg-dark p-3 mb-3">
+            <h5>{{ alert.email }}</h5>
+
+            {% if alert.status == "Breached" %}
+                <span class="badge bg-danger">Breach Detected</span>
+            {% else %}
+                <span class="badge bg-success">Safe</span>
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No monitored emails yet.</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}

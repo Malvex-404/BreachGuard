@@ -1,5 +1,5 @@
-from modules.data_loader import load_data
-from modules.password_utils import mask_password
+from services.breach_loader import load_data
+from services.password_utils import mask_password
 
 def detect_query(query):
     """

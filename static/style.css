@@ -1,0 +1,123 @@
+body {
+    background-color: #0f172a;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.sidebar {
+    min-height: 100vh;
+    background: #020617;
+    padding: 25px;
+    border-right: 1px solid #1e293b;
+}
+
+.sidebar h3 {
+    color: #38bdf8;
+    margin-bottom: 30px;
+}
+
+.sidebar a {
+    display: block;
+    padding: 12px;
+    margin-bottom: 10px;
+    color: #94a3b8;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background: #1e293b;
+    color: #38bdf8;
+}
+
+.main {
+    padding: 40px;
+}
+
+.card-custom {
+    background: #020617;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 25px;
+}
+
+.chart-box {
+    background: #020617;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 20px;
+    min-height: 380px;
+}
+
+.chart-title {
+    color: #38bdf8;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #1e293b;
+    padding-bottom: 10px;
+}
+
+.breach-card {
+    border: 1px solid #1e293b;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background: #0b1220;
+}
+
+.btn-primary {
+    background: #38bdf8;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #0ea5e9;
+}
+
+input.form-control {
+    background: #020617;
+    border: 1px solid #1e293b;
+    color: white;
+}
+
+input.form-control:focus {
+    border-color: #38bdf8;
+    box-shadow: none;
+}
+
+canvas {
+    width: 100% !important;
+    height: 260px !important;
+}
+.breach-card {
+    background: #0b1220;
+    border: 1px solid #1e293b;
+    border-radius: 10px;
+    padding: 16px;
+    transition: 0.3s;
+    height: 100%;
+}
+
+.breach-card:hover {
+    border-color: #38bdf8;
+    transform: translateY(-4px);
+}
+/* Fix text visibility inside breach cards */
+.breach-card {
+    color: #e2e8f0;
+}
+
+.breach-card small {
+    color: #94a3b8 !important;
+}
+
+.breach-card h6 {
+    color: #38bdf8;
+}
+
+.breach-card div {
+    color: #f1f5f9;
+}
+.badge {
+    font-size: 0.75rem;
+}
