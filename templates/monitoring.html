@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h2 class="mb-0">📡 Monitoring Management</h2>
+
+    <a href="{{ url_for('dashboard') }}"
+       class="btn btn-outline-light btn-sm">
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+{% for item in monitor_results %}
+
+<div class="card-custom mb-4">
+    <h5>{{ item.email }}</h5>
+
+    <form method="POST">
+        <input type="hidden" name="remove_email" value="{{ item.email }}">
+        <button class="btn btn-sm btn-outline-danger">
+            Remove
+        </button>
+    </form>
+
+    {% if item.records %}
+
+    <div class="accordion" id="accordion{{ loop.index }}">
+
+        {% for r in item.records %}
+        <div class="accordion-item bg-dark text-light border-secondary">
+
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed bg-dark text-light"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse{{ item.email | replace('@','') | replace('.','') }}{{ loop.index }}">
+
+                    {{ r.breach }} - {{ r.breach_date }}
+
+                    {% if r.resolved %}
+                        <span class="badge bg-success ms-3">Resolved</span>
+                    {% else %}
+                        <span class="badge bg-danger ms-3">Active</span>
+                    {% endif %}
+                </button>
+            </h2>
+
+            <div id="collapse{{ item.email | replace('@','') | replace('.','') }}{{ loop.index }}"
+                 class="accordion-collapse collapse">
+
+                <div class="accordion-body">
+
+                    <p><strong>Data Exposed:</strong> {{ r.data_exposed }}</p>
+
+                    <p><strong>Password Status:</strong>
+                        {% if r.password_status == "Leaked" %}
+                            <span class="badge bg-danger">Leaked</span>
+                        {% else %}
+                            <span class="badge bg-success">Safe</span>
+                        {% endif %}
+                    </p>
+
+                    <hr>
+
+                    <strong>🛠 Recommended Actions:</strong>
+                    <ul>
+                        {% for action in r.recommendations %}
+                        <li>{{ action }}</li>
+                        {% endfor %}
+                    </ul>
+
+                    {% if not r.resolved %}
+                    <form method="POST">
+                        <input type="hidden" name="email" value="{{ item.email }}">
+                        <input type="hidden" name="breach_name" value="{{ r.breach }}">
+                        <button class="btn btn-success btn-sm">
+                            Mark as Resolved
+                        </button>
+                    </form>
+                    {% endif %}
+
+                </div>
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+        <div class="text-success">No breaches detected.</div>
+    {% endif %}
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

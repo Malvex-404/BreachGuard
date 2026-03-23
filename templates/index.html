@@ -2,15 +2,17 @@
 
 {% block content %}
 
-<h1 class="mb-4">🔐 BreachGuard Security Dashboard</h1>
+<h1 class="mb-4">🔐 BreachGuard Public Search</h1>
 
 <div class="card-custom mb-4">
     <h4>Search Data Breach</h4>
 
     <form method="POST" class="mt-3">
         <div class="input-group">
-            <input type="text" name="query" class="form-control"
-                   placeholder="Enter Email or Domain" required>
+            <input type="text" name="query"
+                   class="form-control"
+                   placeholder="Enter Email or Domain"
+                   required>
             <button class="btn btn-primary">Scan</button>
         </div>
     </form>
@@ -18,54 +20,22 @@
 
 {% if detection %}
 
-<!-- Two Charts Side by Side -->
-<div class="row g-4 mt-2">
+    {% if detection.found %}
 
-    <!-- LEFT : Timeline -->
-    <div class="col-lg-6">
-        <div class="chart-box">
-            <h5 class="chart-title">Breach Timeline</h5>
-            <canvas id="timelineChart"></canvas>
-        </div>
-    </div>
+        <div class="row g-4">
 
-    <!-- RIGHT : Risk Chart -->
-    <div class="col-lg-6">
-        <div class="chart-box">
-            <h5 class="chart-title">Risk Visualization</h5>
-            <canvas id="riskChart"></canvas>
-        </div>
-    </div>
+            {% for r in records %}
 
-</div>
+            <div class="col-lg-4 col-md-6">
+                <div class="breach-card">
 
-<!-- Data Table Full Width -->
-<!-- Breach Cards Section -->
-<div class="row mt-4">
+                    <h6 class="text-info">{{ r.breach }}</h6>
 
-    <div class="col-12">
-        <div class="chart-box">
-            <h5 class="chart-title">Breach Intelligence</h5>
+                    <div><strong>Email:</strong> {{ r.email }}</div>
+                    <div><strong>Date:</strong> {{ r.breach_date }}</div>
+                    <div><strong>Data Exposed:</strong> {{ r.data_exposed }}</div>
 
-            {% if detection.found %}
-
-            <div class="row g-4 mt-2">
-
-                {% for r in detection.records %}
-
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="breach-card">
-
-                        <h6 class="mb-2 text-info">{{ r.breach }}</h6>
-
-                        <small>Email:</small>
-                        <div class="mb-2">{{ r.email }}</div>
-
-                        <small class="text-muted">Date:</small>
-                        <div class="mb-2">{{ r.breach_date }}</div>
-
-                        <small class="text-muted">Data Exposed:</small>
-                        <div class="mb-2">{{ r.data_exposed }}</div>
+                    {% if is_logged_in %}
 
                         {% if r.password_status == "Leaked" %}
                             <span class="badge bg-danger mt-2">Password Leaked</span>
@@ -75,107 +45,37 @@
 
                         {% if r.password_display %}
                             <div class="mt-2">
-                                <small class="text-muted">Hint:</small>
-                                <div>{{ r.password_display }}</div>
+                                <strong>Hint:</strong> {{ r.password_display }}
                             </div>
                         {% endif %}
 
-                    </div>
+                    {% else %}
+
+                        <div class="mt-3 text-warning">
+                            🔒 Login to view full details
+                        </div>
+
+                    {% endif %}
+
                 </div>
-
-                {% endfor %}
-
             </div>
 
-            {% else %}
-                <p>No breach records found.</p>
-            {% endif %}
+            {% endfor %}
 
         </div>
-    </div>
 
-</div>
+        {% if not is_logged_in %}
+        <div class="card-custom mt-4 text-center">
+            <h5>Unlock Full Breach Intelligence</h5>
+            <p>Login to view complete breach details, risk analysis, and enable monitoring.</p>
+            <a href="/login" class="btn btn-primary">Login Now</a>
+        </div>
+        {% endif %}
 
-{% endif %}
-
-{% endblock %}
-
-{% block scripts %}
-{% if detection and detection.found %}
-
-<script>
-Chart.defaults.color = "#94a3b8";
-Chart.defaults.borderColor = "#1e293b";
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    /* RISK CHART */
-    const riskCanvas = document.getElementById("riskChart");
-    if (riskCanvas) {
-        new Chart(riskCanvas, {
-            type: "bar",
-            data: {
-                labels: ["Risk Score"],
-                datasets: [{
-                    data: [{{ risk.score }}],
-                    backgroundColor: "#38bdf8",
-                    borderRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { beginAtZero: true, grid: { color: "#1e293b" } },
-                    x: { grid: { display: false } }
-                }
-            }
-        });
-    }
-
-    /* TIMELINE CHART */
-    const timelineCanvas = document.getElementById("timelineChart");
-    if (timelineCanvas) {
-
-        const breachYears = [
-            {% for r in detection.records %}
-                "{{ r.breach_date[:4] }}",
-            {% endfor %}
-        ];
-
-        const yearCount = {};
-        breachYears.forEach(y => {
-            yearCount[y] = (yearCount[y] || 0) + 1;
-        });
-
-        new Chart(timelineCanvas, {
-            type: "line",
-            data: {
-                labels: Object.keys(yearCount),
-                datasets: [{
-                    data: Object.values(yearCount),
-                    borderColor: "#38bdf8",
-                    backgroundColor: "rgba(56,189,248,0.15)",
-                    fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: "#38bdf8"
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { beginAtZero: true, grid: { color: "#1e293b" } },
-                    x: { grid: { color: "#1e293b" } }
-                }
-            }
-        });
-    }
-
-});
-</script>
+    {% else %}
+        <p>No breach records found.</p>
+    {% endif %}
 
 {% endif %}
+
 {% endblock %}

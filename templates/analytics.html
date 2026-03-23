@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>📊 Security Analytics</h2>
+
+    <a href="{{ url_for('dashboard') }}"
+       class="btn btn-outline-light btn-sm">
+        ← Back to Dashboard
+    </a>
+</div>
+
+<div class="row">
+
+    <div class="col-lg-6">
+        <div class="card-custom mb-4">
+            <h5>Breach Timeline</h5>
+            <canvas id="timelineChart"></canvas>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card-custom mb-4">
+            <h5>Password Exposure</h5>
+            <canvas id="passwordChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<div class="card-custom">
+    <h5>Most Common Breach Sources</h5>
+    <canvas id="sourceChart"></canvas>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+const timelineData = {{ timeline | tojson }};
+const breachSources = {{ breach_sources | tojson }};
+
+const passwordLeaks = {{ password_leaks }};
+const totalBreaches = {{ total_breaches }};
+const safePasswords = totalBreaches - passwordLeaks;
+
+
+// Timeline Chart
+new Chart(document.getElementById("timelineChart"), {
+    type: "line",
+    data: {
+        labels: Object.keys(timelineData),
+        datasets: [{
+            data: Object.values(timelineData),
+            borderColor: "#00d4ff",
+            backgroundColor: "rgba(0,212,255,0.2)",
+            fill: true,
+            tension: 0.3
+        }]
+    }
+});
+
+
+// Password Exposure Chart
+new Chart(document.getElementById("passwordChart"), {
+    type: "doughnut",
+    data: {
+        labels: ["Leaked", "Safe"],
+        datasets: [{
+            data: [passwordLeaks, safePasswords],
+            backgroundColor: ["#ff4d4d", "#22c55e"]
+        }]
+    }
+});
+
+
+// Breach Source Chart
+new Chart(document.getElementById("sourceChart"), {
+    type: "bar",
+    data: {
+        labels: Object.keys(breachSources),
+        datasets: [{
+            data: Object.values(breachSources),
+            backgroundColor: "#4f46e5"
+        }]
+    }
+});
+
+</script>
+
+{% endblock %}

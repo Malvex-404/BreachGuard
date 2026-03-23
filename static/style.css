@@ -36,7 +36,7 @@ body {
 }
 
 .card-custom {
-    background: #020617;
+    background: #0b1220;
     border: 1px solid #1e293b;
     border-radius: 12px;
     padding: 25px;
@@ -74,17 +74,25 @@ body {
     background: #0ea5e9;
 }
 
+/* Inputs */
 input.form-control {
-    background: #020617;
-    border: 1px solid #1e293b;
-    color: white;
+    background: #0b1220;
+    border: 1px solid #334155;
+    color: #f1f5f9;
+    padding: 12px;
+}
+
+input.form-control::placeholder {
+    color: #94a3b8;
+    opacity: 1;
 }
 
 input.form-control:focus {
+    background: #0b1220;
     border-color: #38bdf8;
-    box-shadow: none;
+    color: #ffffff;
+    box-shadow: 0 0 0 2px rgba(56,189,248,0.2);
 }
-
 canvas {
     width: 100% !important;
     height: 260px !important;
@@ -120,4 +128,17 @@ canvas {
 }
 .badge {
     font-size: 0.75rem;
+}
+/* Login/Register text fixes */
+.card-custom p,
+.card-custom label,
+.card-custom small {
+    color: #cbd5e1;
+}
+
+.card-custom h3 {
+    color: #ffffff;
+}
+canvas {
+    max-height: 250px;
 }

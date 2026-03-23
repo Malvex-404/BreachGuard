@@ -2,34 +2,196 @@
 
 {% block content %}
 
-<h2 class="mb-4">📧 Monitored Emails</h2>
+<h2 class="mb-4">Welcome, {{ username }}</h2>
 
-<div class="card bg-secondary p-4">
+<div class="row">
 
-    <form method="POST" class="mb-4">
-        <div class="input-group">
-            <input name="email" class="form-control"
-                   placeholder="Add email to monitor" required>
-            <button class="btn btn-warning">Add</button>
+    <!-- LEFT SIDE (8 Columns) -->
+    <div class="col-lg-8">
+
+        <!-- SEARCH -->
+        <div class="card-custom mb-4">
+            <h4>Search Data Breach</h4>
+            <form method="POST">
+                <input type="hidden" name="form_type" value="search">
+                <div class="input-group">
+                    <input type="text" name="query"
+                           class="form-control"
+                           placeholder="Enter Email or Domain"
+                           required>
+                    <button class="btn btn-primary">Scan</button>
+                </div>
+            </form>
         </div>
-    </form>
 
-    {% if alerts %}
-        {% for alert in alerts %}
-        <div class="card bg-dark p-3 mb-3">
-            <h5>{{ alert.email }}</h5>
+        <!-- BREACH INTELLIGENCE -->
+        <div class="card-custom mb-4">
+            {% if detection and detection.found %}
+                <h5>Breach Intelligence</h5>
 
-            {% if alert.status == "Breached" %}
-                <span class="badge bg-danger">Breach Detected</span>
+                <div class="row g-4 mt-2">
+                    {% for r in detection.records %}
+                    <div class="col-md-6">
+                        <div class="breach-card">
+                            <h6 class="text-info">{{ r.breach }}</h6>
+                            <div><strong>Date:</strong> {{ r.breach_date }}</div>
+                            <div><strong>Data:</strong> {{ r.data_exposed }}</div>
+
+                            {% if r.password_status == "Leaked" %}
+                                <span class="badge bg-danger mt-2">Password Leaked</span>
+                            {% else %}
+                                <span class="badge bg-success mt-2">Password Safe</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
             {% else %}
-                <span class="badge bg-success">Safe</span>
+                <div class="text-muted text-center p-5">
+                    Search an email to view breach intelligence.
+                </div>
             {% endif %}
         </div>
-        {% endfor %}
-    {% else %}
-        <p>No monitored emails yet.</p>
-    {% endif %}
+
+    </div>
+
+    <!-- RIGHT SIDE (4 Columns) -->
+    <div class="col-lg-4">
+
+        <!-- MONITOR PANEL -->
+        <div class="card-custom mb-4">
+            <h5>📡 Monitor Email</h5>
+
+            <form method="POST" class="mt-3">
+                <input type="hidden" name="form_type" value="monitor">
+                <div class="input-group">
+                    <input type="email" name="monitor_email"
+                           class="form-control"
+                           placeholder="Enter email to monitor"
+                           required>
+                    <button class="btn btn-primary">Add</button>
+                </div>
+            </form>
+
+            <hr>
+        <div class="card-custom mb-4">
+        
+        <h5>Security Risk Score</h5>
+        
+        <div class="progress" style="height:25px">
+        
+        <div class="progress-bar 
+        {% if risk_score > 70 %}
+        bg-danger
+        {% elif risk_score > 40 %}
+        bg-warning
+        {% else %}
+        bg-success
+        {% endif %}"
+        
+        role="progressbar"
+        style="width: {{ risk_score }}%;">
+        
+        {{ risk_score }}/100
+        
+        </div>
+        
+        </div>
+        
+        </div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <strong>Monitoring Status</strong>
+                <a href="/monitoring" class="btn btn-sm btn-outline-info">
+                    View More
+                </a>
+            </div>
+
+            {% for item in monitor_results[:3] %}
+            <div class="breach-card mb-2">
+                <strong>{{ item.email }}</strong><br>
+                {% if item.records %}
+                    {% set unresolved = item.records | selectattr("resolved", "equalto", False) | list %}
+                            
+                    {% if unresolved %}
+                        <span class="badge bg-danger">At Risk</span>
+                    {% else %}
+                        <span class="badge bg-warning text-dark">Resolved</span>
+                    {% endif %}
+                {% else %}
+                    <span class="badge bg-success">Safe</span>
+                {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if detection and detection.found %}
+
+        <!-- RISK CHART (RIGHT SIDE BELOW MONITOR) -->
+        <div class="card-custom mb-4">
+            <h5>Risk Breakdown</h5>
+            <canvas id="riskChart"></canvas>
+        </div>
+
+        <!-- TIMELINE CHART (RIGHT SIDE BELOW RISK) -->
+        <div class="card-custom mb-4">
+            <h5>Breach Timeline</h5>
+            <canvas id="timelineChart"></canvas>
+        </div>
+
+        {% endif %}
+
+    </div>
 
 </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% if detection and detection.found %}
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const total = {{ detection.records|length }};
+    const leaked = {{ detection.records | selectattr("password_status", "equalto", "Leaked") | list | length }};
+    const safe = total - leaked;
+
+    new Chart(document.getElementById("riskChart"), {
+        type: "doughnut",
+        data: {
+            labels: ["Password Leaked", "Password Safe"],
+            datasets: [{
+                data: [leaked, safe],
+                backgroundColor: ["#ef4444", "#22c55e"]
+            }]
+        }
+    });
+
+});
+
+</script>
+{% endif %}
+
+
+{% if breach_alerts %}
+<script>
+
+window.onload = function(){
+
+let emails = "{{ breach_alerts|join(', ') }}";
+
+alert(
+"⚠ BREACH ALERT!\n\n" +
+"Monitored email(s) exposed:\n\n" +
+emails +
+"\n\nCheck monitoring page immediately."
+);
+
+}
+
+</script>
+{% endif %}
 
 {% endblock %}
