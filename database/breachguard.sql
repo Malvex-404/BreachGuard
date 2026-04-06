@@ -89,3 +89,21 @@ CREATE TABLE breach_notifications (
     REFERENCES users(id)
     ON DELETE CASCADE
 );
+DROP TABLE monitored_breach_status;
+
+CREATE TABLE monitored_breach_status (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    email VARCHAR(150) NOT NULL,
+    breach_name VARCHAR(150) NOT NULL,
+    breach_date VARCHAR(20) NOT NULL,
+    resolved BOOLEAN DEFAULT FALSE,
+    resolved_at TIMESTAMP NULL,
+
+    UNIQUE KEY unique_breach_resolution 
+    (user_id, email, breach_name, breach_date),
+
+    FOREIGN KEY (user_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE
+);

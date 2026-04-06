@@ -26,7 +26,7 @@ def get_notifications(user_id):
 
     cursor.execute("""
         SELECT * FROM breach_notifications
-        WHERE user_id=%s
+        WHERE user_id=%s AND is_read=FALSE
         ORDER BY created_at DESC
     """, (user_id,))
 
@@ -71,3 +71,17 @@ def unread_notification_count(user_id):
     conn.close()
 
     return count
+
+def mark_all_notifications_read(user_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE breach_notifications
+        SET is_read = TRUE
+        WHERE user_id = %s
+    """, (user_id,))
+
+    conn.commit()
+    cursor.close()
+    conn.close()

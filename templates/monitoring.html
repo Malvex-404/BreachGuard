@@ -1,28 +1,93 @@
 {% extends "base.html" %}
 {% block content %}
+<div id="scanOverlay" style="
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(2,6,23,0.95);
+    z-index:9999;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    color:white;
+">
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="spinner-border text-info mb-3" style="width:3rem;height:3rem;"></div>
 
-    <h2 class="mb-0">📡 Monitoring Management</h2>
+    <h5>Scanning for breaches...</h5>
+    <small class="text-muted">Please wait, this may take a few seconds</small>
 
-    <a href="{{ url_for('dashboard') }}"
-       class="btn btn-outline-light btn-sm">
+</div>
+<div class="card-custom mb-4">
+
+    <div class="d-flex justify-content-between align-items-center">
+
+        <div>
+            <h5 class="mb-1">📡 Monitoring Control</h5>
+            <small class="text-muted">Run scan or enable auto monitoring</small>
+
+        </div>
+
+        <!-- Scan Now -->
+        <form method="POST">
+            <input type="hidden" name="action" value="scan_now">
+            <button type="button" class="btn btn-primary btn-sm" onclick="startFullScan()">
+                🔍 Scan Now
+            </button>
+            
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-light btn-sm">
         ← Back to Dashboard
     </a>
+        </form>
+
+    </div>
+
+    <hr>
+
+    <!-- Auto Scan -->
+    <form method="POST" class="d-flex gap-2 align-items-center">
+
+        <input type="hidden" name="action" value="auto_scan">
+
+        <label class="mb-0">Auto Scan:</label>
+
+        <select name="interval" class="form-select form-select-sm" style="width:120px;">
+        
+            <option value="0" {% if auto_scan_interval == "0" %}selected{% endif %}>Off</option>
+            <option value="15" {% if auto_scan_interval == "15" %}selected{% endif %}>15 min</option>
+            <option value="30" {% if auto_scan_interval == "30" %}selected{% endif %}>30 min</option>
+            <option value="60" {% if auto_scan_interval == "60" %}selected{% endif %}>60 min</option>
+        
+        </select>
+
+        <button class="btn btn-outline-info btn-sm">
+            Apply
+        </button>
+
+    </form>
 
 </div>
 
 {% for item in monitor_results %}
 
 <div class="card-custom mb-4">
-    <h5>{{ item.email }}</h5>
 
-    <form method="POST">
-        <input type="hidden" name="remove_email" value="{{ item.email }}">
-        <button class="btn btn-sm btn-outline-danger">
-            Remove
-        </button>
-    </form>
+    <!-- HEADER ROW -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h5 class="mb-0">{{ item.email }}</h5>
+
+        <form method="POST" class="m-0">
+            <input type="hidden" name="remove_email" value="{{ item.email }}">
+            <button class="btn btn-sm btn-outline-danger">
+                Remove
+            </button>
+        </form>
+
+    </div>
 
     {% if item.records %}
 
@@ -32,18 +97,21 @@
         <div class="accordion-item bg-dark text-light border-secondary">
 
             <h2 class="accordion-header">
-                <button class="accordion-button collapsed bg-dark text-light"
+                <button class="accordion-button collapsed bg-dark text-light d-flex justify-content-between"
                         type="button"
                         data-bs-toggle="collapse"
                         data-bs-target="#collapse{{ item.email | replace('@','') | replace('.','') }}{{ loop.index }}">
 
-                    {{ r.breach }} - {{ r.breach_date }}
+                    <span>
+                        {{ r.breach }} - {{ r.breach_date }}
+                    </span>
 
                     {% if r.resolved %}
                         <span class="badge bg-success ms-3">Resolved</span>
                     {% else %}
                         <span class="badge bg-danger ms-3">Active</span>
                     {% endif %}
+
                 </button>
             </h2>
 
@@ -72,9 +140,10 @@
                     </ul>
 
                     {% if not r.resolved %}
-                    <form method="POST">
+                    <form method="POST" class="mt-2">
                         <input type="hidden" name="email" value="{{ item.email }}">
                         <input type="hidden" name="breach_name" value="{{ r.breach }}">
+                        <input type="hidden" name="breach_date" value="{{ r.breach_date }}">
                         <button class="btn btn-success btn-sm">
                             Mark as Resolved
                         </button>
@@ -94,7 +163,35 @@
     {% endif %}
 
 </div>
+<script>
 
+let interval = "{{ auto_scan_interval or '0' }}";
+
+if(interval !== "0"){
+
+    let time = parseInt(interval) * 60 * 1000;
+
+    setInterval(() => {
+        location.reload();
+    }, time);
+}
+
+</script>
+
+<script>
+
+function startFullScan(){
+
+    // Show full screen overlay
+    document.getElementById("scanOverlay").style.display = "flex";
+
+    // Allow form to submit normally after small delay
+    setTimeout(() => {
+        document.querySelector('form input[name="action"][value="scan_now"]').form.submit();
+    }, 300);
+}
+
+</script>
 {% endfor %}
 
 {% endblock %}

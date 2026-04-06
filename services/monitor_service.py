@@ -98,22 +98,26 @@ def check_monitor_status(user_id):
         for record in records:
 
             breach = record["breach"]
+            breach_date = record.get("breach_date")
 
+            # ✅ ONLY SELECT (no insert here)
             cursor.execute("""
                 SELECT resolved
                 FROM monitored_breach_status
-                WHERE user_id=%s AND email=%s AND breach_name=%s
-            """, (user_id, email, breach))
+                WHERE user_id=%s 
+                AND email=%s 
+                AND breach_name=%s 
+                AND breach_date=%s
+            """, (user_id, email, breach, breach_date))
 
             status = cursor.fetchone()
 
-            # Correct resolution detection
             if status:
                 record["resolved"] = bool(status["resolved"])
             else:
                 record["resolved"] = False
 
-            # Only create notification if breach not resolved
+            # Create notification only if unresolved
             if not record["resolved"]:
                 create_notification(user_id, email, breach)
 
@@ -129,19 +133,19 @@ def check_monitor_status(user_id):
     return results
 
 
-def mark_breach_resolved(user_id, email, breach_name):
+def mark_breach_resolved(user_id, email, breach_name, breach_date):
 
     conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
-        INSERT INTO monitored_breach_status 
-        (user_id, email, breach_name, resolved, resolved_at)
-        VALUES (%s, %s, %s, TRUE, NOW())
-        ON DUPLICATE KEY UPDATE
-        resolved=TRUE,
-        resolved_at=NOW()
-    """, (user_id, email, breach_name))
+    INSERT INTO monitored_breach_status 
+    (user_id, email, breach_name, breach_date, resolved, resolved_at)
+    VALUES (%s, %s, %s, %s, TRUE, NOW())
+    ON DUPLICATE KEY UPDATE
+    resolved=TRUE,
+    resolved_at=NOW()
+""", (user_id, email, breach_name, breach_date))
 
     conn.commit()
     cursor.close()

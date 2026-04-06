@@ -1,9 +1,52 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div id="scanOverlay" style="
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(2,6,23,0.95);
+    z-index:9999;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    color:white;
+">
 
+    <div class="spinner-border text-info mb-3" style="width:3rem;height:3rem;"></div>
+
+    <h5 id="scanMessage">Scanning Dashboard...</h5>
+    <small class="text-muted">Analyzing breach exposure</small>
+
+</div>
 <h2 class="mb-4">Welcome, {{ username }}</h2>
+{% if breach_alerts %}
 
+<div class="card-custom mb-4 border-danger">
+
+    <div class="d-flex justify-content-between align-items-center">
+
+        <div>
+            <h5 class="text-danger mb-1">🚨 Security Alert</h5>
+
+            <small>
+                {{ breach_alerts|length }} monitored email(s) exposed
+            </small>
+        </div>
+
+        <a href="{{ url_for('monitoring') }}"
+           class="btn btn-sm btn-danger">
+            View
+        </a>
+
+    </div>
+
+</div>
+
+{% endif %}
 <div class="row">
 
     <!-- LEFT SIDE (8 Columns) -->
@@ -12,14 +55,21 @@
         <!-- SEARCH -->
         <div class="card-custom mb-4">
             <h4>Search Data Breach</h4>
+        
             <form method="POST">
                 <input type="hidden" name="form_type" value="search">
+            
                 <div class="input-group">
                     <input type="text" name="query"
                            class="form-control"
                            placeholder="Enter Email or Domain"
                            required>
-                    <button class="btn btn-primary">Scan</button>
+                
+                    <button type="button"
+                            class="btn btn-primary"
+                            onclick="startDashboardScan(this)">
+                        Scan
+                    </button>
                 </div>
             </form>
         </div>
@@ -149,49 +199,139 @@
 
 {% block scripts %}
 
+<!-- CHART SCRIPT (UNCHANGED) -->
 {% if detection and detection.found %}
+
 <script>
 
-document.addEventListener("DOMContentLoaded", function () {
+window.onload = function () {
 
-    const total = {{ detection.records|length }};
-    const leaked = {{ detection.records | selectattr("password_status", "equalto", "Leaked") | list | length }};
-    const safe = total - leaked;
+    // =====================
+    // SAFETY CHECK
+    // =====================
+    if (typeof Chart === "undefined") {
+        console.error("Chart.js not loaded");
+        return;
+    }
 
-    new Chart(document.getElementById("riskChart"), {
-        type: "doughnut",
-        data: {
-            labels: ["Password Leaked", "Password Safe"],
-            datasets: [{
-                data: [leaked, safe],
-                backgroundColor: ["#ef4444", "#22c55e"]
-            }]
-        }
-    });
+    // =====================
+    // RISK CHART
+    // =====================
+    const riskCanvas = document.getElementById("riskChart");
 
-});
+    if (riskCanvas) {
+
+        const total = {{ detection.records|length }};
+        const leaked = {{ detection.records | selectattr("password_status", "equalto", "Leaked") | list | length }};
+        const safe = total - leaked;
+
+        new Chart(riskCanvas, {
+            type: "doughnut",
+            data: {
+                labels: ["Password Leaked", "Password Safe"],
+                datasets: [{
+                    data: [leaked, safe],
+                    backgroundColor: ["#ef4444", "#22c55e"]
+                }]
+            }
+        });
+    }
+
+    // =====================
+    // TIMELINE CHART
+    // =====================
+    const timelineCanvas = document.getElementById("timelineChart");
+
+    if (timelineCanvas) {
+
+        let labels = [];
+        let values = [];
+
+        {% set years = {} %}
+        {% for r in detection.records %}
+            {% set y = r.breach_date[:4] %}
+            {% if y in years %}
+                {% set _ = years.update({y: years[y] + 1}) %}
+            {% else %}
+                {% set _ = years.update({y: 1}) %}
+            {% endif %}
+        {% endfor %}
+
+        labels = {{ years.keys() | list | tojson }};
+        values = {{ years.values() | list | tojson }};
+
+        new Chart(timelineCanvas, {
+            type: "line",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Breaches Over Time",
+                    data: values,
+                    borderColor: "#38bdf8",
+                    backgroundColor: "rgba(56,189,248,0.1)",
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        labels: { color: "#e2e8f0" }
+                    }
+                },
+                scales: {
+                    x: { ticks: { color: "#e2e8f0" } },
+                    y: { ticks: { color: "#e2e8f0" } }
+                }
+            }
+        });
+    }
+
+};
 
 </script>
+
 {% endif %}
 
-
-{% if breach_alerts %}
+<!-- 🔥 SCAN ANIMATION SCRIPT (ALWAYS LOAD) -->
 <script>
 
-window.onload = function(){
+let messages = [
+    "Checking leaked credentials...",
+    "Analyzing breach sources...",
+    "Calculating risk score..."
+];
 
-let emails = "{{ breach_alerts|join(', ') }}";
+function startDashboardScan(btn){
 
-alert(
-"⚠ BREACH ALERT!\n\n" +
-"Monitored email(s) exposed:\n\n" +
-emails +
-"\n\nCheck monitoring page immediately."
-);
+    let overlay = document.getElementById("scanOverlay");
+    let messageText = document.getElementById("scanMessage");
+
+    overlay.style.display = "flex";
+
+    let i = 0;
+
+    let interval = setInterval(() => {
+        messageText.innerText = messages[i];
+        i = (i + 1) % messages.length;
+    }, 600);
+
+    setTimeout(() => {
+    clearInterval(interval);
+
+    // Show completion message
+    messageText.innerText = "Scan Complete ✅";
+
+    // Small delay before submit
+    setTimeout(() => {
+        showToast("Scan completed successfully 🚀");
+        btn.closest("form").submit();
+    }, 800);
+
+}, 1800);
 
 }
 
 </script>
-{% endif %}
 
 {% endblock %}

@@ -12,7 +12,7 @@ from services.recommendation_service import get_recommendations
 from services.monitor_service import mark_breach_resolved
 from services.notification_service import get_notifications, mark_notification_read
 from services.notification_service import unread_notification_count
-
+from services.breach_simulator import simulate_breaches
 
 app = Flask(__name__)
 app.secret_key = "super_secret_key_change_this"
@@ -72,14 +72,7 @@ def password_check():
     return render_template("password_check.html", result=result)
 
 
-# -------------------------------
-# LOGIN (Will connect to MySQL later)
-# -------------------------------
 
-
-# -------------------------------
-# REGISTER (Will connect to MySQL later)
-# -------------------------------
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
@@ -262,6 +255,18 @@ def login():
 
     return render_template("login.html", message=message)
 
+@app.context_processor
+def inject_notification_count():
+
+    if "user_id" in session:
+        count = unread_notification_count(session["user_id"])
+    else:
+        count = 0
+
+    return dict(notification_count=count)
+
+
+
 @app.route("/monitoring", methods=["GET", "POST"])
 def monitoring():
 
@@ -272,36 +277,50 @@ def monitoring():
 
     if request.method == "POST":
 
-        # 1️⃣ Remove monitored email
+        # Remove monitored email
         if request.form.get("remove_email"):
             remove_monitor_email(
                 user_id,
                 request.form.get("remove_email")
             )
 
-        # 2️⃣ Mark individual breach as resolved
+        # Mark breach resolved
         elif request.form.get("email") and request.form.get("breach_name"):
             mark_breach_resolved(
                 user_id,
                 request.form.get("email"),
-                request.form.get("breach_name")
+                request.form.get("breach_name"),
+                request.form.get("breach_date")
             )
 
-        # Prevent form resubmission on refresh
+        # Scan Now (just reload)
+        elif request.form.get("action") == "scan_now":
+            monitor_results = check_monitor_status(user_id)
+            emails = [item["email"] for item in monitor_results]
+            simulate_breaches(user_id, emails)
+
+        # Auto Scan
+        elif request.form.get("action") == "auto_scan":
+            interval = request.form.get("interval")
+            session["auto_scan_interval"] = interval
+            session["auto_scan_enabled"] = True
+
         return redirect(url_for("monitoring"))
 
-    # Always reload latest monitoring state
     monitor_results = check_monitor_status(user_id)
 
-    # Attach recommendations safely
     for item in monitor_results:
         for record in item.get("records", []):
             record["recommendations"] = get_recommendations(record)
 
     return render_template(
-        "monitoring.html",
-        monitor_results=monitor_results
-    )
+    "monitoring.html",
+    monitor_results=monitor_results,
+    auto_scan_interval=session.get("auto_scan_interval"),
+    auto_scan_enabled=session.get("auto_scan_enabled", False)
+)
+
+
 
 @app.route("/analytics")
 def analytics():
@@ -351,13 +370,23 @@ def notifications():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
+
     user_id = session["user_id"]
 
     if request.method == "POST":
-        notification_id = request.form.get("notification_id")
 
-        if notification_id:
-            mark_notification_read(notification_id)
+        # Mark ALL
+        if request.form.get("mark_all"):
+            from services.notification_service import mark_all_notifications_read
+            mark_all_notifications_read(user_id)
+
+        else:
+            notification_id = request.form.get("notification_id")
+
+            if notification_id:
+                mark_notification_read(int(notification_id))
+
+        return redirect(url_for("notifications"))
 
     alerts = get_notifications(user_id)
 

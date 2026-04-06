@@ -100,3 +100,45 @@ df = pd.DataFrame(records, columns=columns)
 df.to_csv("data/breaches.csv", index=False)
 
 print("Dataset generated successfully with", len(df), "records.")
+
+def generate_dataset():
+
+    import pandas as pd
+    import random
+    from datetime import datetime, timedelta
+
+    # (keep all your lists same)
+
+    records = []
+
+    for _ in range(50):   # smaller batch for runtime
+        company, domain = random.choice(companies)
+
+        email_prefix = random.choice(names)
+        email = f"{email_prefix}{random.randint(1,100)}@{domain}"
+
+        breach_date = random_date().strftime("%Y-%m-%d")
+        attack = random.choice(attack_types)
+        exposed_data = random.choice(data_types)
+
+        password_exposed = random.choice(["Yes", "No"])
+
+        password_hint = generate_password_hint() if password_exposed == "Yes" else "Not Available"
+
+        records.append([
+            email,
+            domain,
+            company,
+            breach_date,
+            attack,
+            exposed_data,
+            password_hint,
+            password_exposed
+        ])
+
+    df = pd.DataFrame(records, columns=[
+        "email","domain","breach","breach_date",
+        "attack_type","data_exposed","password_hint","password_exposed"
+    ])
+
+    return df
