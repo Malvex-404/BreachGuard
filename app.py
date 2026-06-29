@@ -13,6 +13,17 @@ from services.monitor_service import mark_breach_resolved
 from services.notification_service import get_notifications, mark_notification_read
 from services.notification_service import unread_notification_count
 from services.breach_simulator import simulate_breaches
+from datetime import datetime
+from flask import send_file
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus.tables import Table
+from reportlab.platypus.tables import TableStyle
+from reportlab.lib import colors
+from reportlab.platypus.flowables import PageBreak
+from reportlab.platypus import Image
+
+import io
 
 app = Flask(__name__)
 app.secret_key = "super_secret_key_change_this"
@@ -223,18 +234,205 @@ def dashboard():
 # -------------------------------
 # REPORT DOWNLOAD
 # -------------------------------
-@app.route("/report", methods=["POST"])
-def report():
+@app.route("/download_report")
+def download_report():
 
-    query = request.form.get("query")
+    if "user_id" not in session:
+        return redirect(url_for("login"))
 
-    detection = detect_query(query)
-    risk = calculate_risk(detection)
+    user_id = session["user_id"]
 
-    filepath = generate_report(query, detection, risk)
+    monitor_results = check_monitor_status(user_id)
 
-    return send_file(filepath, as_attachment=True)
+    # -----------------------------
+    # ANALYTICS
+    # -----------------------------
+    total_breaches = 0
+    password_leaks = 0
 
+    for item in monitor_results:
+        for r in item.get("records", []):
+
+            total_breaches += 1
+
+            if r.get("password_status") == "Leaked":
+                password_leaks += 1
+
+    safe_passwords = total_breaches - password_leaks
+
+    # Risk Level
+    if password_leaks > 3:
+        risk_level = "HIGH"
+    elif password_leaks > 1:
+        risk_level = "MEDIUM"
+    else:
+        risk_level = "LOW"
+
+    # -----------------------------
+    # PDF GENERATION
+    # -----------------------------
+    buffer = io.BytesIO()
+
+    doc = SimpleDocTemplate(
+        buffer,
+        rightMargin=30,
+        leftMargin=30,
+        topMargin=30,
+        bottomMargin=20
+    )
+
+    styles = getSampleStyleSheet()
+
+    elements = []
+
+    # -----------------------------
+    # TITLE
+    # -----------------------------
+    title = Paragraph(
+        "<font size=22><b>BreachGuard Security Report</b></font>",
+        styles['Title']
+    )
+
+    elements.append(title)
+    elements.append(Spacer(1, 12))
+
+    # -----------------------------
+    # SUMMARY
+    # -----------------------------
+    summary = f"""
+    <font size=11>
+    <b>Generated On:</b> {datetime.now().strftime("%d %b %Y, %H:%M")}<br/>
+    <b>Risk Level:</b> {risk_level}<br/>
+    <b>Total Breaches:</b> {total_breaches}<br/>
+    <b>Passwords Leaked:</b> {password_leaks}<br/>
+    <b>Safe Passwords:</b> {safe_passwords}
+    </font>
+    """
+
+    elements.append(Paragraph(summary, styles['BodyText']))
+    elements.append(Spacer(1, 15))
+
+    # -----------------------------
+    # EXECUTIVE SUMMARY
+    # -----------------------------
+    exec_summary = f"""
+    <font size=11>
+    The BreachGuard system identified <b>{total_breaches}</b> breach records
+    associated with monitored accounts. Among these,
+    <b>{password_leaks}</b> breaches involved password exposure,
+    resulting in a <b>{risk_level}</b> security risk level.
+    Users are advised to update compromised passwords
+    and enable two-factor authentication.
+    </font>
+    """
+
+    elements.append(
+        Paragraph(
+            "<b>Executive Summary</b>",
+            styles['Heading2']
+        )
+    )
+
+    elements.append(
+        Paragraph(exec_summary, styles['BodyText'])
+    )
+
+    elements.append(Spacer(1, 15))
+
+    # -----------------------------
+    # TABLE
+    # -----------------------------
+    data = [
+        ["Email", "Breach", "Date", "Password"]
+    ]
+
+    for item in monitor_results:
+
+        for r in item.get("records", []):
+
+            data.append([
+                item["email"],
+                r.get("breach", "N/A"),
+                r.get("breach_date", "N/A"),
+                r.get("password_status", "Unknown")
+            ])
+
+    table = Table(data, colWidths=[150, 120, 100, 100])
+
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), colors.black),
+        ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+
+        ('GRID', (0,0), (-1,-1), 1, colors.black),
+
+        ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
+
+        ('BACKGROUND', (0,1), (-1,-1), colors.whitesmoke),
+
+        ('BOTTOMPADDING', (0,0), (-1,0), 10),
+    ]))
+
+    elements.append(
+        Paragraph(
+            "<b>Breach Details</b>",
+            styles['Heading2']
+        )
+    )
+
+    elements.append(table)
+
+    elements.append(Spacer(1, 15))
+
+    # -----------------------------
+    # RECOMMENDATIONS
+    # -----------------------------
+    recommendations = """
+    • Change exposed passwords immediately.<br/>
+    • Enable two-factor authentication.<br/>
+    • Avoid reusing passwords across services.<br/>
+    • Monitor accounts regularly for suspicious activity.<br/>
+    • Use strong and unique passwords.
+    """
+
+    elements.append(
+        Paragraph(
+            "<b>Security Recommendations</b>",
+            styles['Heading2']
+        )
+    )
+
+    elements.append(
+        Paragraph(recommendations, styles['BodyText'])
+    )
+
+    elements.append(Spacer(1, 10))
+
+    # -----------------------------
+    # FOOTER
+    # -----------------------------
+    footer = """
+    <font size=9 color='gray'>
+    Generated by BreachGuard Cybersecurity Platform
+    </font>
+    """
+
+    elements.append(
+        Paragraph(footer, styles['BodyText'])
+    )
+
+    # -----------------------------
+    # BUILD PDF
+    # -----------------------------
+    doc.build(elements)
+
+    buffer.seek(0)
+
+    return send_file(
+        buffer,
+        as_attachment=True,
+        download_name="breachguard_report.pdf",
+        mimetype="application/pdf"
+    )
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
@@ -353,14 +551,15 @@ def analytics():
 
             # Password leaks
             if record.get("password_status") == "Leaked":
-                password_leaks += 1
-
+                password_leaks += 1 
+        current_time = datetime.now().strftime("%d %b %Y, %H:%M")
     return render_template(
         "analytics.html",
         timeline=timeline,
         breach_sources=breach_sources,
         password_leaks=password_leaks,
-        total_breaches=total_breaches
+        total_breaches=total_breaches,
+        current_time=current_time
     )
 
 
