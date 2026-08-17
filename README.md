@@ -125,15 +125,6 @@ Charts are rendered using **Chart.js**.
 </details>
 
 <details>
-<summary><b>🔑 Password Strength Analysis</b></summary>
-
-The application includes a dedicated password-check page that evaluates password strength and provides feedback.
-
-The password analysis is performed locally by the application's password-analysis service.
-
-</details>
-
-<details>
 <summary><b>📝 Security Report Generation</b></summary>
 
 Authenticated breach searches can be turned into downloadable PDF reports.
