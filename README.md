@@ -48,7 +48,6 @@ BreachGuard is designed to turn breach records into more understandable security
 - 🚨 **Security notifications**
 - 🧮 **Risk scoring**
 - 📊 **Interactive analytics**
-- 🔑 **Password-strength analysis**
 - 📝 **PDF security reports**
 - 🧪 **Synthetic breach simulation**
 - 💡 **Recommended security actions**
