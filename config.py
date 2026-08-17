@@ -1,6 +1,6 @@
 DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
-    "password": "root",
-    "database": "breachguard"
+    "host": "Hostname or IP address of the database server",
+    "user": "Username for database access",
+    "password": "Password for database access",
+    "database": "my_database"
 }
